@@ -1,0 +1,36 @@
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+      force-request: true
+      force-response: true
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  mvc:
+    static-path-pattern: /static/**
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    view-names: thymeleaf/*
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://kcfinder.cf6og1l7mjlg.ap-northeast-2.rds.amazonaws.com:3306/kcfinder?useUnicode=true&characterEncoding=UTF-8
+    username: admin
+    password: "zz0103300!!"
+  web:
+    resources:
+      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+    
+mybatis:
+  mapper-locations:
+  - classpath:mappers/**/*.xml

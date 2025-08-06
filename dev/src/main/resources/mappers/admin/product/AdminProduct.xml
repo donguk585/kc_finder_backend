@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  	<mapper namespace="com.kcFinder.dev.domain.admin.product.AdminUserProductRepository">
+
+  	<select id="adminUserProducts" resultType="com.kcFinder.dev.domain.admin.product.AdminUserProduct">
+
+	SELECT
+	    U1.user_code,
+	    U1.user_id,
+	    P1.product_code,
+	    P1.product_name,
+	    GROUP_CONCAT(DISTINCT P2.product_img_path ORDER BY P2.product_img_path SEPARATOR '\n\n') AS product_img_path,
+	    M1.matching_product_code,
+	    M1.kc_certification_num,
+	    M1.matching_product_link,
+	    GROUP_CONCAT(DISTINCT M2.matching_kc_img_url ORDER BY M2.matching_kc_img_url SEPARATOR '\n\n') AS matching_kc_img_url
+	FROM
+	    user_mst U1
+	INNER JOIN
+	    user_product P1 ON U1.user_code = P1.user_code
+	LEFT JOIN
+	    user_product_img P2 ON P1.product_code = P2.product_code
+	LEFT JOIN
+	    matching_product M1 ON P1.product_code = M1.product_code
+	LEFT JOIN
+	    matching_product_img M2 ON M1.matching_product_code = M2.matching_product_code
+	GROUP BY
+	    U1.user_code,
+	    U1.user_id,
+	    P1.product_code,
+	    P1.product_name,
+	    M1.matching_product_code,
+	    M1.kc_certification_num,
+	    M1.matching_product_link
+	ORDER BY
+	    P1.product_code DESC, U1.user_code ASC;
+  
+  	</select>
+  	
+    </mapper>

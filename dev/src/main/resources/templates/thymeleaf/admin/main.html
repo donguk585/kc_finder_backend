@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- 왼쪽 사이드바 네비게이션 -->
+        <div class="sidebar">
+			<div class="logo">
+			    <!-- 로고 텍스트 대신 이미지로 변경 -->
+			    <img src="/static/images/mainLogo.svg" alt="KC-FINDER 로고" style="width: 150px; height: auto;">
+			</div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/">회원관리</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- 메인 콘텐츠 영역 -->
+        <div class="main-content">
+            <div class="container">
+                <h1>회원 관리</h1>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>회원번호</th>
+                                <th>회원ID</th>
+                                <th>제품코드</th>
+                                <th>제품이름</th>
+                                <th>제품사진URL</th>
+                                <th>매칭사진코드</th>
+                                <th>KC인증번호</th>
+                                <th>매칭제품링크</th>
+                                <th>매칭사진URL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<script>
+	    document.addEventListener('DOMContentLoaded', function() {
+	        const tableBody = document.getElementById('memberTableBody');
+
+	        // 데이터 로딩 함수 (jQuery AJAX 사용)
+	        function fetchMembers() {
+	            $.ajax({
+	                async: true,
+	                type: "GET",
+	                url: "/api/admin/product/matching",
+	                dataType: "json",
+	                success: function(members) {
+						let memData = members.data
+	                    console.log("응답 데이터:", members);
+						
+
+	                    // 데이터가 없으면 메시지 표시
+	                    if (memData.length === 0) {
+	                        tableBody.innerHTML = '<tr><td colspan="9" style="text-align: center;">조회된 회원 데이터가 없습니다.</td></tr>';
+	                        return;
+	                    }
+
+	                    // 테이블 내용 초기화
+	                    tableBody.innerHTML = '';
+
+	                    // 데이터로 테이블 채우기
+	                    memData.forEach(member => {
+	                        const row = tableBody.insertRow();
+							
+	                        // 각 셀에 데이터 삽입
+	                        row.insertCell().textContent = member.userCode;
+	                        row.insertCell().textContent = member.userId;
+	                        row.insertCell().textContent = member.productCode;
+	                        row.insertCell().textContent = member.productName;
+
+	                        // 제품사진URL
+							const productImgPathCell = row.insertCell();
+							if (member.productImgPath) {
+							    const urls = member.productImgPath.split('\n\n');
+							    urls.forEach((url, index) => {
+							        if (url.trim() !== '') { // 빈 문자열 방지
+							            const link = document.createElement('a');
+							            link.href = url.trim();
+							            link.textContent = url.trim();
+							            link.target = "_blank"; // 새 탭에서 열기
+							            productImgPathCell.appendChild(link);
+							            if (index < urls.length - 1) { // 마지막 URL이 아니면 줄 바꿈 추가
+							                productImgPathCell.appendChild(document.createElement('br'));
+							            }
+							        }
+							    });
+							} else {
+							    productImgPathCell.textContent = '';
+							}
+	                        
+	                        row.insertCell().textContent = member.matchingProductCode;
+	                        row.insertCell().textContent = member.kcCertificationNum;
+
+	                        // 매칭제품링크
+	                        const matchingLinkCell = row.insertCell();
+	                        if (member.matchingProductLink) {
+	                            const link = document.createElement('a');
+	                            link.href = member.matchingProductLink;
+	                            link.textContent = member.matchingProductLink;
+	                            link.target = "_blank"; // 새 탭에서 열기
+	                            matchingLinkCell.appendChild(link);
+	                        } else {
+	                            matchingLinkCell.textContent = '';
+	                        }
+	                        
+	                        // 매칭사진URL
+							const matchingKcImgUrlCell = row.insertCell();
+							if (member.matchingKcImgUrl) {
+							    const urls = member.matchingKcImgUrl.split('\n\n');
+							    urls.forEach((url, index) => {
+							        if (url.trim() !== '') {
+							            const link = document.createElement('a');
+							            link.href = url.trim();
+							            link.textContent = url.trim();
+							            link.target = "_blank";
+							            matchingKcImgUrlCell.appendChild(link);
+							            if (index < urls.length - 1) {
+							                matchingKcImgUrlCell.appendChild(document.createElement('br'));
+							            }
+							        }
+							    });
+							} else {
+							    matchingKcImgUrlCell.textContent = '';
+							}
+	                    });
+	                },
+	                error: function(jqXHR, textStatus, errorThrown) {
+	                    console.error('데이터를 불러오는 중 오류 발생:', textStatus, errorThrown, jqXHR);
+	                    tableBody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: red;">데이터 로드 실패: ' + textStatus + ' - ' + errorThrown + '</td></tr>';
+	                }
+	            });
+	        }
+
+	        // 페이지 로드 시 데이터 가져오기 함수 호출
+	        fetchMembers();
+	    });
+	</script>
+	
+</body>
+</html>

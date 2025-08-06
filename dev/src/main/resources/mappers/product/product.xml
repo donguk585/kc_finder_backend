@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  	<mapper namespace="com.kcFinder.dev.domain.product.UserProductRepository">
+  	
+  	<insert id="insertUserProduct" parameterType="com.kcFinder.dev.domain.product.UserProduct"
+  	useGeneratedKeys="true" keyProperty="product_code">
+  	insert into
+		user_product(
+			product_code,
+			user_code,
+			product_name,
+			create_date,
+			update_date
+		)
+	values(
+		0,
+		#{user_code},
+		#{product_name},
+		now(),
+		now()
+		);
+		
+  	</insert>
+  	
+  	<insert id="insertUserProductFile" parameterType="com.kcFinder.dev.domain.product.UserProductFile"
+  	useGeneratedKeys="true" keyProperty="product_img_code">
+  	insert into
+		user_product_img(
+			product_img_code,
+			product_code,
+			product_img_path,
+			create_date,
+			update_date
+		)
+	values(
+		0,
+		#{product_code},
+		#{product_img_path},
+		now(),
+		now()
+		);
+		
+  	</insert>
+  	
+  	<select id="matchingMyProductList" parameterType="Integer" resultType="com.kcFinder.dev.domain.product.MatchingMyProductList">
+  
+	SELECT t1.product_code,
+		   t1.product_name,
+		   t1.user_code,
+		   t2.product_img_path
+	  FROM user_product t1
+	 INNER JOIN user_product_img t2 ON t1.product_code = t2.product_code
+	 WHERE t1.user_code = #{userCode}
+	   AND t1.product_code = (SELECT MAX(product_code) FROM user_product WHERE user_code = #{userCode});
+  
+  	</select>
+  	
+  	<select id="matchingMyProductPlusList" parameterType="Integer" resultType="com.kcFinder.dev.domain.product.MatchingMyProductPlusList">
+  
+	SELECT
+	    c1.matching_product_code,
+	    c1.kc_certification_num,
+	    c1.matching_product_link,
+	    c2.matching_kc_img_url
+	FROM user_product t1
+	LEFT JOIN matching_product c1 ON t1.product_code = c1.product_code
+	LEFT JOIN matching_product_img c2 ON c1.matching_product_code = c2.matching_product_code
+	WHERE t1.user_code = #{userCode} AND t1.product_code = #{productCode};
+  
+  	</select>
+  	
+  	
+  	
+  	
+    </mapper>
