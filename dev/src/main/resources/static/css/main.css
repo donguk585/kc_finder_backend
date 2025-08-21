@@ -58,7 +58,6 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.main-nav ul li a:hover,
 .main-nav ul li a.active {
     background-color: #34495e;
 }

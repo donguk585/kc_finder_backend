@@ -9,4 +9,8 @@ public interface AdminUserProductRepository {
 
 	public List<AdminUserProduct> adminUserProducts() throws Exception;
 	
+	public int adminInsertMatchingProduct(AdminUserProduct adminUserProduct) throws Exception;
+	
+	public int adminInsertMatchingProductUrl(AdminUserProduct adminUserProduct) throws Exception;
+	
 }

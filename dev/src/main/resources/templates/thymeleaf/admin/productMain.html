@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <link rel="stylesheet" href="/static/css/productMain.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- 왼쪽 사이드바 네비게이션 -->
+        <div class="sidebar">
+			<div class="logo">
+			    <!-- 로고 텍스트 대신 이미지로 변경 -->
+			    <img src="/static/images/mainLogo.svg" alt="KC-FINDER 로고" style="width: 150px; height: auto;">
+			</div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/">회원관리</a></li>
+					<li><a href="/productMain">제품관리</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- 메인 콘텐츠 영역 -->
+        <div class="main-content">
+            <div class="container">
+                <h1>제품 관리</h1>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>제품이름</th>
+                                <th>제품사진URL</th>
+								<th>매칭제품등록</th>
+                                <th>KC인증번호</th>
+                                <th>매칭제품링크</th>
+                                <th>매칭사진URL</th>
+								<th>매칭여부</th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+	<div id="productModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2>매칭 정보</h2>
+			<div id="modal-text-content">
+				<div class="image-slider-container">
+					<span class="slider-button left">&#10094;</span>
+					<img id="modal-image" src="" alt="제품 이미지">
+					<span class="slider-button right">&#10095;</span>
+				</div>
+
+	            <div class="input-group">
+	                <label for="kcNumber">KC 인증번호</label>
+	                <input type="text" id="kcNumber" placeholder="KC 인증번호를 입력하세요.">
+	            </div>
+
+	            <div class="input-group">
+	                <label for="matchingProductLink">매칭 제품링크</label>
+	                <input type="text" id="matchingProductLink" placeholder="매칭 제품 링크를 입력하세요.">
+	            </div>
+
+	            <div class="url-input-section">
+	                <div class="url-input-header">
+	                    <label>매칭사진URL</label>
+	                    <button type="button" class="add-button" onclick="addUrlInput()">+</button>
+	                </div>
+	                <div id="matchingPhotoUrlContainer">
+	                </div>
+	            </div>
+	            
+	            <button type="button" id="registrationButton">등록</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	    document.addEventListener('DOMContentLoaded', function() {
+	        const tableBody = document.getElementById('memberTableBody');
+			const modal = document.getElementById('productModal');
+			const modalImage = document.getElementById('modal-image');
+			const userCodeText = document.getElementById('user-code-text');
+			const leftButton = document.querySelector('.slider-button.left');
+			const rightButton = document.querySelector('.slider-button.right');
+			const closeButton = document.querySelector('.modal .close');
+			const registrationButton = document.getElementById('registrationButton');
+			
+			let imagePaths = [];
+			let currentIndex = 0;
+			let currentProductCode = null;
+			
+			function showImage(index) {
+			    if (imagePaths.length > 0) {
+			        modalImage.src = imagePaths[index];
+			    } else {
+			        modalImage.src = '';
+			    }
+			}
+
+			function openMatchModal(productCode, productImgPath) {
+				currentProductCode = parseInt(productCode);
+			    imagePaths = productImgPath.split('\n\n').filter(url => url.trim() !== '');
+			    currentIndex = 0;
+			    
+			    if (imagePaths.length <= 1) {
+			        leftButton.style.display = 'none';
+			        rightButton.style.display = 'none';
+			    } else {
+			        leftButton.style.display = 'block';
+			        rightButton.style.display = 'block';
+			    }
+
+			    showImage(currentIndex);
+			    modal.style.display = 'block';
+				document.getElementById('kcNumber').value = '';
+				document.getElementById('matchingProductLink').value = '';
+				document.getElementById('matchingPhotoUrlContainer').innerHTML = '';
+				addUrlInput();
+			}
+
+			leftButton.onclick = function() {
+			    currentIndex = (currentIndex > 0) ? currentIndex - 1 : imagePaths.length - 1;
+			    showImage(currentIndex);
+			};
+
+			rightButton.onclick = function() {
+			    currentIndex = (currentIndex < imagePaths.length - 1) ? currentIndex + 1 : 0;
+			    showImage(currentIndex);
+			};
+
+			closeButton.onclick = function() {
+			    modal.style.display = 'none';
+			};
+
+			window.onclick = function(event) {
+			    if (event.target == modal) {
+			        modal.style.display = 'none';
+			    }
+			};
+
+			// 매칭사진URL 입력 필드 동적 추가 함수
+			window.addUrlInput = function() {
+			    const container = document.getElementById('matchingPhotoUrlContainer');
+			    const newRow = document.createElement('div');
+			    newRow.className = 'input-row';
+			    newRow.innerHTML = `
+			        <input type="text" class="input-full-width" placeholder="매칭 사진 URL을 입력하세요.">
+			        <button type="button" class="remove-button" onclick="deleteUrlInput(this)">-</button>
+			    `;
+			    container.appendChild(newRow);
+			};
+
+			// URL 입력 필드 삭제 함수
+			window.deleteUrlInput = function(button) {
+			    const inputRow = button.closest('.input-row');
+			    inputRow.remove();
+			};
+
+
+			// 등록 버튼 클릭 이벤트
+			registrationButton.onclick = function() {
+			    const productCode = currentProductCode;
+			    const kcCertificationNum = document.getElementById('kcNumber').value;
+			    const matchingProductLink = document.getElementById('matchingProductLink').value;
+			    
+			    const matching_kc_img_url_list = [];
+			    const urlInputs = document.querySelectorAll('#matchingPhotoUrlContainer input');
+			    urlInputs.forEach(input => {
+			        if (input.value.trim() !== '') {
+			            matching_kc_img_url_list.push(input.value.trim());
+			        }
+			    });
+
+			    const data = {
+			        productCode: productCode,
+			        kcCertificationNum: kcCertificationNum,
+			        matchingProductLink: matchingProductLink,
+			        matchingKcImgUrl: matching_kc_img_url_list.join('\n\n')
+			    };
+
+				console.log(data);
+				
+			    $.ajax({
+			        type: "POST",
+			        url: "/api/admin/product/registration",
+			        contentType: "application/json",
+			        data: JSON.stringify(data),
+			        success: function(response) {
+			            alert("제품이 성공적으로 등록되었습니다!");
+			            modal.style.display = 'none';
+			            fetchMembers(); // 목록 새로고침
+			        },
+			        error: function(xhr, status, error) {
+			            alert("등록 실패: " + xhr.responseText);
+			        }
+			    });
+			};
+
+			
+	        // 데이터 로딩 함수 (jQuery AJAX 사용)
+	        function fetchMembers() {
+	            $.ajax({
+	                async: true,
+	                type: "GET",
+	                url: "/api/admin/product/matching",
+	                dataType: "json",
+	                success: function(members) {
+						let memData = members.data
+	                    console.log("응답 데이터:", members);
+						
+
+	                    // 데이터가 없으면 메시지 표시
+	                    if (memData.length === 0) {
+	                        tableBody.innerHTML = '<tr><td colspan="9" style="text-align: center;">조회된 회원 데이터가 없습니다.</td></tr>';
+	                        return;
+	                    }
+
+	                    // 테이블 내용 초기화
+	                    tableBody.innerHTML = '';
+
+	                    // 데이터로 테이블 채우기
+	                    memData.forEach(member => {
+	                        const row = tableBody.insertRow();
+							
+	                        // 각 셀에 데이터 삽입
+	                        row.insertCell().textContent = member.productName;
+
+	                        // 제품사진URL
+							const productImgPathCell = row.insertCell();
+							if (member.productImgPath) {
+							    const urls = member.productImgPath.split('\n\n');
+							    urls.forEach((url, index) => {
+							        if (url.trim() !== '') { // 빈 문자열 방지
+							            const link = document.createElement('a');
+							            link.href = url.trim();
+							            link.textContent = url.trim();
+							            link.target = "_blank"; // 새 탭에서 열기
+							            productImgPathCell.appendChild(link);
+							            if (index < urls.length - 1) { // 마지막 URL이 아니면 줄 바꿈 추가
+							                productImgPathCell.appendChild(document.createElement('br'));
+							            }
+							        }
+							    });
+							} else {
+							    productImgPathCell.textContent = '';
+							}
+							
+							// 제품등록하기 버튼
+							const registerCell = row.insertCell();
+							const registerButton = document.createElement('button');
+							registerButton.textContent = '등록';
+							registerButton.onclick = function() {
+								openMatchModal(member.productCode, member.productImgPath);
+							};
+							registerCell.appendChild(registerButton);
+							
+	                        row.insertCell().textContent = member.kcCertificationNum;
+
+	                        // 매칭제품링크
+	                        const matchingLinkCell = row.insertCell();
+	                        if (member.matchingProductLink) {
+	                            const link = document.createElement('a');
+	                            link.href = member.matchingProductLink;
+	                            link.textContent = member.matchingProductLink;
+	                            link.target = "_blank"; // 새 탭에서 열기
+	                            matchingLinkCell.appendChild(link);
+	                        } else {
+	                            matchingLinkCell.textContent = '';
+	                        }
+	                        
+	                        // 매칭사진URL
+							const matchingKcImgUrlCell = row.insertCell();
+							if (member.matchingKcImgUrl) {
+							    const urls = member.matchingKcImgUrl.split('\n\n');
+							    urls.forEach((url, index) => {
+							        if (url.trim() !== '') {
+							            const link = document.createElement('a');
+							            link.href = url.trim();
+							            link.textContent = url.trim();
+							            link.target = "_blank";
+							            matchingKcImgUrlCell.appendChild(link);
+							            if (index < urls.length - 1) {
+							                matchingKcImgUrlCell.appendChild(document.createElement('br'));
+							            }
+							        }
+							    });
+							} else {
+							    matchingKcImgUrlCell.textContent = '';
+							}
+							
+							// 매칭여부 추가
+							const matchingStatusCell = row.insertCell();
+							// member.matchingProductCode가 null이 아니면 '매칭', null이면 '미매칭'으로 표시
+							console.log(member.matchingProductCode);
+							matchingStatusCell.textContent = member.matchingProductCode !== 0 ? '매칭' : '미매칭';
+	                    });
+	                },
+	                error: function(jqXHR, textStatus, errorThrown) {
+	                    console.error('데이터를 불러오는 중 오류 발생:', textStatus, errorThrown, jqXHR);
+	                    tableBody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: red;">데이터 로드 실패: ' + textStatus + ' - ' + errorThrown + '</td></tr>';
+	                }
+	            });
+	        }
+
+	        // 페이지 로드 시 데이터 가져오기 함수 호출
+	        fetchMembers();
+	    });
+	</script>
+	
+</body>
+</html>

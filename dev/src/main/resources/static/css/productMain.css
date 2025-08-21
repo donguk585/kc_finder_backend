@@ -1,0 +1,327 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+    color: #333;
+    display: flex;
+}
+
+/* 전체 페이지 래퍼 */
+.wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* 왼쪽 사이드바 스타일 */
+.sidebar {
+    width: 250px;
+    background-color: #416081;
+    color: white;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.sidebar .logo {
+    font-size: 32px;
+    font-weight: bold;
+    color: #ecf0f1;
+    margin-bottom: 40px;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.main-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.main-nav ul li {
+    margin-bottom: 10px;
+}
+
+.main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 12px 20px;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.main-nav ul li a.active {
+    background-color: #34495e;
+}
+
+/* 메인 콘텐츠 영역 스타일 */
+.main-content {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: #ffffff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 30px;
+}
+
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.table-container table button {
+    background-color: #007bff; /* 파란색 배경 */
+    color: white; /* 흰색 텍스트 */
+    border: none; /* 테두리 없음 */
+    border-radius: 4px; /* 모서리 둥글게 */
+    padding: 8px 12px; /* 패딩 */
+    font-size: 14px; /* 폰트 크기 */
+    cursor: pointer; /* 마우스 오버 시 포인터 모양 */
+    transition: background-color 0.3s ease; /* 부드러운 색상 전환 */
+}
+
+.table-container table button:hover {
+    background-color: #0056b3; /* 더 진한 파란색 */
+}
+
+.table-container table button:active {
+    background-color: #004085; /* 가장 진한 파란색 */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed;
+}
+
+table thead tr {
+    background-color: #000066;
+    color: white;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+    
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+table th:nth-child(1), table td:nth-child(1) { width: 200px; }  /* 제품이름 */
+table th:nth-child(2), table td:nth-child(2) { width: 250px; } /* 제품사진URL */
+table th:nth-child(3), table td:nth-child(3) { width: 100px; }  /* 제품등록 */
+table th:nth-child(4), table td:nth-child(4) { width: 180px; } /* KC인증번호 */
+table th:nth-child(5), table td:nth-child(5) { width: 250px; } /* 매칭제품링크 */
+table th:nth-child(6), table td:nth-child(6) { width: 250px; } /* 매칭사진URL */
+table th:nth-child(7), table td:nth-child(7) { width: 80px; } /* 매칭여부 */
+
+table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table tbody tr:hover {
+    background-color: #e9f5fd;
+}
+
+/* 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 이미지 슬라이더 스타일 */
+.image-slider-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+
+#modal-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.slider-button {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    user-select: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+}
+
+.slider-button.left {
+    left: 0;
+}
+
+.slider-button.right {
+    right: 0;
+}
+
+.slider-button:hover {
+    background-color: rgba(0,0,0,0.8);
+    color: white;
+}
+
+/* 새로운 입력란 스타일 */
+.input-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.input-group label {
+    flex: 2;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.input-group input {
+    flex: 5;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 매칭사진URL 전용 스타일 */
+.url-input-section {
+    width: 100%;
+}
+
+.url-input-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.url-input-header label {
+    margin-right: 10px;
+	font-weight: bold;
+}
+
+.url-input-header button {
+    margin-left: auto; /* 버튼을 우측으로 이동 */
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    gap: 5px;
+    width: 100%; /* 너비 90% */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+.input-row input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-button, .remove-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.remove-button {
+    background-color: #dc3545;
+}
+
+.add-button:hover {
+    background-color: #5a6268;
+}
+
+.remove-button:hover {
+    background-color: #c82333;
+}
+
+/* 등록 버튼 스타일 */
+#registrationButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#registrationButton:hover {
+    background-color: #218838;
+}

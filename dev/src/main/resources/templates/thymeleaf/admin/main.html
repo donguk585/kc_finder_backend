@@ -18,6 +18,7 @@
             <nav class="main-nav">
                 <ul>
                     <li><a href="/">회원관리</a></li>
+					<li><a href="/productMain">제품관리</a></li>
                 </ul>
             </nav>
         </div>
@@ -53,6 +54,7 @@
 	    document.addEventListener('DOMContentLoaded', function() {
 	        const tableBody = document.getElementById('memberTableBody');
 
+			
 	        // 데이터 로딩 함수 (jQuery AJAX 사용)
 	        function fetchMembers() {
 	            $.ajax({
@@ -138,6 +140,7 @@
 							} else {
 							    matchingKcImgUrlCell.textContent = '';
 							}
+							
 	                    });
 	                },
 	                error: function(jqXHR, textStatus, errorThrown) {

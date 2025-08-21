@@ -3,9 +3,11 @@ package com.kcFinder.dev.domain.admin.product;
 import com.kcFinder.dev.web.dto.admin.product.AdminUserProductRespDto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +21,7 @@ public class AdminUserProduct {
 	private int matching_product_code;
 	private String kc_certification_num;
 	private String matching_product_link;
+	private int matching_product_img_code;
 	private String matching_kc_img_url;
 	
 	public AdminUserProductRespDto toDto() {

@@ -10,4 +10,9 @@ public class PageController {
 	public String loadAdminMain() {
 		return "thymeleaf/admin/main.html";
 	}
+	
+	@GetMapping("/productMain")
+	public String loadProductMain() {
+		return "thymeleaf/admin/productMain.html";
+	}
 }
