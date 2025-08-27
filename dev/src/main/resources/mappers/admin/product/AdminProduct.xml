@@ -3,6 +3,21 @@
   
   	<mapper namespace="com.kcFinder.dev.domain.admin.product.AdminUserProductRepository">
 
+  	<select id="adminUsers" resultType="com.kcFinder.dev.domain.admin.product.AdminUser">
+
+	SELECT
+	    user_code,
+	    user_id,
+		user_pw,
+		user_email,
+		user_phone
+	FROM
+	    user_mst
+	ORDER BY
+	    user_code DESC;
+  
+  	</select>
+
   	<select id="adminUserProducts" resultType="com.kcFinder.dev.domain.admin.product.AdminUserProduct">
 
 	SELECT

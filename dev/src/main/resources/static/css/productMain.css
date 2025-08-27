@@ -17,7 +17,7 @@ body {
 /* 왼쪽 사이드바 스타일 */
 .sidebar {
     width: 250px;
-    background-color: #416081;
+    background-color: #B4B4B4;
     color: white;
     padding: 20px 0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
@@ -70,7 +70,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     background-color: #ffffff;
     padding: 30px;
@@ -88,7 +88,7 @@ h1 {
 }
 
 .table-container table button {
-    background-color: #007bff; /* 파란색 배경 */
+    background-color: #518DFC; /* 파란색 배경 */
     color: white; /* 흰색 텍스트 */
     border: none; /* 테두리 없음 */
     border-radius: 4px; /* 모서리 둥글게 */
@@ -114,7 +114,7 @@ table {
 }
 
 table thead tr {
-    background-color: #000066;
+    background-color: #8D8D8D;
     color: white;
 }
 
@@ -128,13 +128,14 @@ table th, table td {
     text-overflow: ellipsis;
 }
 
-table th:nth-child(1), table td:nth-child(1) { width: 200px; }  /* 제품이름 */
-table th:nth-child(2), table td:nth-child(2) { width: 250px; } /* 제품사진URL */
-table th:nth-child(3), table td:nth-child(3) { width: 100px; }  /* 제품등록 */
-table th:nth-child(4), table td:nth-child(4) { width: 180px; } /* KC인증번호 */
-table th:nth-child(5), table td:nth-child(5) { width: 250px; } /* 매칭제품링크 */
-table th:nth-child(6), table td:nth-child(6) { width: 250px; } /* 매칭사진URL */
-table th:nth-child(7), table td:nth-child(7) { width: 80px; } /* 매칭여부 */
+table th:nth-child(1), table td:nth-child(1) { width: 60px; }  /* 제품이름 */
+table th:nth-child(2), table td:nth-child(2) { width: 200px; } /* 제품사진URL */
+table th:nth-child(3), table td:nth-child(3) { width: 150px; }  /* 제품등록 */
+table th:nth-child(4), table td:nth-child(4) { width: 100px; } /* KC인증번호 */
+table th:nth-child(5), table td:nth-child(5) { width: 180px; } /* 매칭제품링크 */
+table th:nth-child(6), table td:nth-child(6) { width: 150px; } /* 매칭사진URL */
+table th:nth-child(7), table td:nth-child(7) { width: 150px; } /* 매칭여부 */
+table th:nth-child(8), table td:nth-child(8) { width: 80px; } /* 매칭여부 */
 
 table tbody tr:nth-child(even) {
     background-color: #f2f2f2;
@@ -142,6 +143,26 @@ table tbody tr:nth-child(even) {
 
 table tbody tr:hover {
     background-color: #e9f5fd;
+}
+
+/* 모든 링크의 기본 색상을 검은색으로 설정 */
+a {
+    color: black;
+}
+
+/* 방문한 링크의 색상도 검은색으로 설정 */
+a:visited {
+    color: black;
+}
+
+/* 마우스를 올렸을 때의 색상도 검은색으로 설정 (원한다면 다른 색상으로 변경 가능) */
+a:hover {
+    color: black;
+}
+
+/* 링크를 클릭하는 동안의 색상도 검은색으로 설정 */
+a:active {
+    color: black;
 }
 
 /* 모달 스타일 */

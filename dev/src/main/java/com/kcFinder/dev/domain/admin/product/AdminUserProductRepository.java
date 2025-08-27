@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AdminUserProductRepository {
 
+	public List<AdminUser> adminUsers() throws Exception;
+	
 	public List<AdminUserProduct> adminUserProducts() throws Exception;
 	
 	public int adminInsertMatchingProduct(AdminUserProduct adminUserProduct) throws Exception;

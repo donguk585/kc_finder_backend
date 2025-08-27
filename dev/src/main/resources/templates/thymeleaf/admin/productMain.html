@@ -19,6 +19,7 @@
                 <ul>
                     <li><a href="/">회원관리</a></li>
 					<li><a href="/productMain">제품관리</a></li>
+					<li><a href="/contact">문의하기</a></li>
                 </ul>
             </nav>
         </div>
@@ -31,6 +32,7 @@
                     <table>
                         <thead>
                             <tr>
+								<th>회원번호</th>
                                 <th>제품이름</th>
                                 <th>제품사진URL</th>
 								<th>매칭제품등록</th>
@@ -233,6 +235,7 @@
 	                        const row = tableBody.insertRow();
 							
 	                        // 각 셀에 데이터 삽입
+							row.insertCell().textContent = member.userCode;
 	                        row.insertCell().textContent = member.productName;
 
 	                        // 제품사진URL

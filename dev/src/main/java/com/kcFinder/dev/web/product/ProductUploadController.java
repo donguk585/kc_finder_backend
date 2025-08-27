@@ -93,4 +93,21 @@ public class ProductUploadController {
 		return ResponseEntity.ok().body(new CMRespDto<>(1, "나의 기자재 불러오기 성공", result));
 
 	}
+	
+//	@GetMapping("/matching/{user_code}")
+//	public ResponseEntity<?> MatchingMyProductList(@PathVariable("user_code") int userCode) {
+//		
+//		List<MatchingMyProductListRespDto> result = new ArrayList<>();
+//		
+//		try {
+//			result = productService.findMyProductListByUserCode(userCode);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			return ResponseEntity.ok().body(new CMRespDto<>(-1, "나의 기자재 불러오기 실패", result));
+//
+//		}
+//		return ResponseEntity.ok().body(new CMRespDto<>(1, "나의 기자재 불러오기 성공", result));
+//
+//	}
 }

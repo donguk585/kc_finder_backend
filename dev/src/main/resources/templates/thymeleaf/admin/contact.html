@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <link rel="stylesheet" href="/static/css/contact.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- 왼쪽 사이드바 네비게이션 -->
+        <div class="sidebar">
+			<div class="logo">
+			    <!-- 로고 텍스트 대신 이미지로 변경 -->
+			    <img src="/static/images/mainLogo.svg" alt="KC-FINDER 로고" style="width: 150px; height: auto;">
+			</div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/">회원관리</a></li>
+					<li><a href="/productMain">제품관리</a></li>
+					<li><a href="/contact">문의하기</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- 메인 콘텐츠 영역 -->
+        <div class="main-content">
+            <div class="container">
+				<h1>문의하기</h1>
+                <div class="table-container">
+					<table>
+					    <thead>
+					        <tr>
+								<th>회원번호</th>
+								<th>문의제목</th>
+								<th>문의내용</th>
+								<th>답변하기</th>
+					        </tr>
+					    </thead>
+					    <tbody id="memberTableBody">
+					    </tbody>
+					</table>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<script>
+	    
+	</script>
+	
+</body>
+</html>

@@ -19,6 +19,7 @@
                 <ul>
                     <li><a href="/">회원관리</a></li>
 					<li><a href="/productMain">제품관리</a></li>
+					<li><a href="/contact">문의하기</a></li>
                 </ul>
             </nav>
         </div>
@@ -31,15 +32,11 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>회원번호</th>
-                                <th>회원ID</th>
-                                <th>제품코드</th>
-                                <th>제품이름</th>
-                                <th>제품사진URL</th>
-                                <th>매칭사진코드</th>
-                                <th>KC인증번호</th>
-                                <th>매칭제품링크</th>
-                                <th>매칭사진URL</th>
+								<th>회원번호</th>
+								<th>회원ID</th>
+								<th>비밀번호</th>
+								<th>이메일</th>
+								<th>전화번호</th>
                             </tr>
                         </thead>
                         <tbody id="memberTableBody">
@@ -60,7 +57,7 @@
 	            $.ajax({
 	                async: true,
 	                type: "GET",
-	                url: "/api/admin/product/matching",
+	                url: "/api/admin/product/user",
 	                dataType: "json",
 	                success: function(members) {
 						let memData = members.data
@@ -77,71 +74,18 @@
 	                    tableBody.innerHTML = '';
 
 	                    // 데이터로 테이블 채우기
-	                    memData.forEach(member => {
-	                        const row = tableBody.insertRow();
+						memData.forEach(member => {
+						    const row = tableBody.insertRow();
 							
-	                        // 각 셀에 데이터 삽입
-	                        row.insertCell().textContent = member.userCode;
-	                        row.insertCell().textContent = member.userId;
-	                        row.insertCell().textContent = member.productCode;
-	                        row.insertCell().textContent = member.productName;
-
-	                        // 제품사진URL
-							const productImgPathCell = row.insertCell();
-							if (member.productImgPath) {
-							    const urls = member.productImgPath.split('\n\n');
-							    urls.forEach((url, index) => {
-							        if (url.trim() !== '') { // 빈 문자열 방지
-							            const link = document.createElement('a');
-							            link.href = url.trim();
-							            link.textContent = url.trim();
-							            link.target = "_blank"; // 새 탭에서 열기
-							            productImgPathCell.appendChild(link);
-							            if (index < urls.length - 1) { // 마지막 URL이 아니면 줄 바꿈 추가
-							                productImgPathCell.appendChild(document.createElement('br'));
-							            }
-							        }
-							    });
-							} else {
-							    productImgPathCell.textContent = '';
-							}
-	                        
-	                        row.insertCell().textContent = member.matchingProductCode;
-	                        row.insertCell().textContent = member.kcCertificationNum;
-
-	                        // 매칭제품링크
-	                        const matchingLinkCell = row.insertCell();
-	                        if (member.matchingProductLink) {
-	                            const link = document.createElement('a');
-	                            link.href = member.matchingProductLink;
-	                            link.textContent = member.matchingProductLink;
-	                            link.target = "_blank"; // 새 탭에서 열기
-	                            matchingLinkCell.appendChild(link);
-	                        } else {
-	                            matchingLinkCell.textContent = '';
-	                        }
-	                        
-	                        // 매칭사진URL
-							const matchingKcImgUrlCell = row.insertCell();
-							if (member.matchingKcImgUrl) {
-							    const urls = member.matchingKcImgUrl.split('\n\n');
-							    urls.forEach((url, index) => {
-							        if (url.trim() !== '') {
-							            const link = document.createElement('a');
-							            link.href = url.trim();
-							            link.textContent = url.trim();
-							            link.target = "_blank";
-							            matchingKcImgUrlCell.appendChild(link);
-							            if (index < urls.length - 1) {
-							                matchingKcImgUrlCell.appendChild(document.createElement('br'));
-							            }
-							        }
-							    });
-							} else {
-							    matchingKcImgUrlCell.textContent = '';
-							}
-							
-	                    });
+						    // 각 셀에 데이터 삽입
+						    row.insertCell().textContent = member.userCode;
+						    row.insertCell().textContent = member.userId;
+							const pwLength = member.userPw ? member.userPw.length : 0;
+	                        const maskedPw = '*'.repeat(pwLength);
+	                        row.insertCell().textContent = maskedPw;
+						    row.insertCell().textContent = member.userEmail;
+						    row.insertCell().textContent = member.userPhone;
+						});
 	                },
 	                error: function(jqXHR, textStatus, errorThrown) {
 	                    console.error('데이터를 불러오는 중 오류 발생:', textStatus, errorThrown, jqXHR);

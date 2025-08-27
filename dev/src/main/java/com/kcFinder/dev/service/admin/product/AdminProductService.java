@@ -4,9 +4,12 @@ import java.util.List;
 
 import com.kcFinder.dev.web.dto.admin.product.AdminInsertMatchingProductReqDto;
 import com.kcFinder.dev.web.dto.admin.product.AdminUserProductRespDto;
+import com.kcFinder.dev.web.dto.admin.product.AdminUserRespDto;
 
 
 public interface AdminProductService {
+	
+	public List<AdminUserRespDto> findUserListForAdmin() throws Exception;
 
 	public List<AdminUserProductRespDto> findProductListForAdmin() throws Exception;
 	

@@ -14,6 +14,7 @@ import com.kcFinder.dev.service.admin.product.AdminProductService;
 import com.kcFinder.dev.web.dto.CMRespDto;
 import com.kcFinder.dev.web.dto.admin.product.AdminInsertMatchingProductReqDto;
 import com.kcFinder.dev.web.dto.admin.product.AdminUserProductRespDto;
+import com.kcFinder.dev.web.dto.admin.product.AdminUserRespDto;
 import com.kcFinder.dev.web.dto.product.ProductFileReqDto;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,24 @@ import lombok.RequiredArgsConstructor;
 public class AdminProductController {
 
 	private final AdminProductService adminProductService;
+	
+	@GetMapping("/user")
+	public ResponseEntity<?> AdminUsers() {
+		
+		List<AdminUserRespDto> result = new ArrayList<>();
+		
+		try {
+			result = adminProductService.findUserListForAdmin();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ResponseEntity.ok().body(new CMRespDto<>(-1, "기자재 불러오기 실패", result));
+
+		}
+		return ResponseEntity.ok().body(new CMRespDto<>(1, "기자재 불러오기 성공", result));
+
+	}
+	
 	
 	@GetMapping("/matching")
 	public ResponseEntity<?> AdminMatchingProduct() {

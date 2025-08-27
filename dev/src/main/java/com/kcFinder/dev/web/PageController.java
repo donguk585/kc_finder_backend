@@ -15,4 +15,10 @@ public class PageController {
 	public String loadProductMain() {
 		return "thymeleaf/admin/productMain.html";
 	}
+	
+	@GetMapping("/contact")
+	public String loadContactMain() {
+		return "thymeleaf/admin/contact.html";
+	}
+	
 }
