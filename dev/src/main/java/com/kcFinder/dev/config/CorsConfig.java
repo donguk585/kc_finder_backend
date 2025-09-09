@@ -17,6 +17,7 @@ public class CorsConfig {
 		config.setAllowCredentials(true);
 		config.addAllowedOrigin("http://localhost:3000");
 		config.addAllowedOrigin("https://www.kcfinder.co.kr");
+		config.addAllowedOrigin("https://api.kcfinder.co.kr");
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 		source.registerCorsConfiguration("/**", config);
