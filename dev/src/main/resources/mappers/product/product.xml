@@ -70,7 +70,80 @@
   
   	</select>
   	
+
+    <!-- 결과 매핑 -->
+    <resultMap id="ProductDetailResultMap" type="com.kcFinder.dev.web.dto.product.ProductDetailDto">
+        <result property="userCode" column="user_code"/>
+        <result property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
+        <result property="createDate" column="create_date"/>
+        <result property="matchingProductCode" column="matching_product_code"/>
+        <result property="kcCertificationNum" column="kc_certification_num"/>
+        <result property="matchingProductLink" column="matching_product_link"/>
+        <collection property="productImgPath" ofType="String" javaType="java.util.List" 
+                   select="getProductImages" column="product_code"/>
+        <collection property="matchingKcImgUrl" ofType="String" javaType="java.util.List" 
+                   select="getMatchingImages" column="matching_product_code"/>
+    </resultMap>
+
+    <!-- 모든 상품 목록 조회 -->
+    <select id="getAllProducts" resultMap="ProductDetailResultMap">
+        SELECT DISTINCT
+            up.user_code,
+            up.product_code,
+            up.product_name,
+           	up.create_date,
+            mp.matching_product_code,
+            mp.kc_certification_num,
+            mp.matching_product_link
+        FROM user_product up
+        LEFT JOIN matching_product mp ON up.product_code = mp.product_code
+        ORDER BY up.product_code DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <!-- 상품 이미지 조회 -->
+    <select id="getProductImages" resultType="String">
+        SELECT product_img_path
+        FROM user_product_img
+        WHERE product_code = #{product_code}
+    </select>
+
+    <!-- 매칭된 KC 이미지 조회 -->
+    <select id="getMatchingImages" resultType="String">
+        SELECT matching_kc_img_url
+        FROM matching_product_img
+        WHERE matching_product_code = #{matching_product_code}
+    </select>
+
+    <!-- 전체 상품 수 조회 -->
+    <select id="getTotalProductCount" resultType="int">
+        SELECT COUNT(DISTINCT up.product_code)
+        FROM user_product up
+    </select>
   	
-  	
-  	
+  	    <!-- 특정 유저의 상품 목록 조회 -->
+    <select id="getProductsByUser" resultMap="ProductDetailResultMap">
+        SELECT DISTINCT
+            up.user_code,
+            up.product_code,
+            up.product_name,
+            up.create_date,
+            mp.matching_product_code,
+            mp.kc_certification_num,
+            mp.matching_product_link
+        FROM user_product up
+        LEFT JOIN matching_product mp ON up.product_code = mp.product_code
+        WHERE up.user_code = #{userCode}
+        ORDER BY up.product_code DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <!-- 특정 유저의 상품 수 조회 -->
+    <select id="getTotalProductCountByUser" resultType="int">
+        SELECT COUNT(DISTINCT up.product_code)
+        FROM user_product up
+        WHERE up.user_code = #{userCode}
+    </select>
+    
     </mapper>

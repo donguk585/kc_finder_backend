@@ -12,7 +12,10 @@ import com.kcFinder.dev.domain.product.UserProductFile;
 import com.kcFinder.dev.domain.product.UserProductRepository;
 import com.kcFinder.dev.web.dto.product.MatchingMyProductListRespDto;
 import com.kcFinder.dev.web.dto.product.MatchingMyProductPlusListRespDto;
+import com.kcFinder.dev.web.dto.product.PaginationDto;
+import com.kcFinder.dev.web.dto.product.ProductDetailDto;
 import com.kcFinder.dev.web.dto.product.ProductFileReqDto;
+import com.kcFinder.dev.web.dto.product.ProductListRespDto;
 import com.kcFinder.dev.web.dto.product.ProductReqDto;
 
 import lombok.RequiredArgsConstructor;
@@ -103,5 +106,72 @@ public class ProductServiceImpl implements ProductService{
 		
 		return matchingMyProductPlusListRespDtos;
 	}
+
+	@Override
+	public ProductListRespDto getAllProducts(int page) throws Exception {
+		int PAGE_SIZE = 5;
+        try {
+            // 페이지 번호는 1부터 시작하므로 0-based로 변환
+            int offset = (page - 1) * PAGE_SIZE;
+            
+            // 전체 상품 수 조회
+            int totalCount = userProductRepository.getTotalProductCount();
+            int totalPages = (int) Math.ceil((double) totalCount / PAGE_SIZE);
+            boolean hasNext = page < totalPages;
+            
+            // 상품 목록 조회
+            List<ProductDetailDto> products = userProductRepository.getAllProducts(offset, PAGE_SIZE);
+            System.out.println(products);
+            // 페이지네이션 정보 생성
+            PaginationDto pagination = PaginationDto.builder()
+                    .currentPage(page)
+                    .totalPage(totalPages)
+                    .size(PAGE_SIZE)
+                    .hasNext(hasNext)
+                    .build();
+            
+            return ProductListRespDto.builder()
+                    .items(products)
+                    .pagination(pagination)
+                    .build();
+                    
+        } catch (Exception e) {
+            throw new RuntimeException("상품 목록 조회 중 오류가 발생했습니다.", e);
+        }
+    }
+
+	@Override
+	public ProductListRespDto getProductsByUser(int userCode, int page) throws Exception {
+		int PAGE_SIZE = 5;
+        try {
+            // 페이지 번호는 1부터 시작하므로 0-based로 변환
+            int offset = (page - 1) * PAGE_SIZE;
+            
+            // 특정 유저의 상품 수 조회
+            int totalCount = userProductRepository.getTotalProductCountByUser(userCode);
+            int totalPages = (int) Math.ceil((double) totalCount / PAGE_SIZE);
+            boolean hasNext = page < totalPages;
+            
+            // 특정 유저의 상품 목록 조회
+            List<ProductDetailDto> products = userProductRepository.getProductsByUser(userCode, offset, PAGE_SIZE);
+            
+            // 페이지네이션 정보 생성
+            PaginationDto pagination = PaginationDto.builder()
+                    .currentPage(page)
+                    .totalPage(totalPages)
+                    .size(PAGE_SIZE)
+                    .hasNext(hasNext)
+                    .build();
+            
+            return ProductListRespDto.builder()
+                    .items(products)
+                    .pagination(pagination)
+                    .build();
+                    
+        } catch (Exception e) {
+            throw new RuntimeException("유저 상품 목록 조회 중 오류가 발생했습니다.", e);
+        }
+    }
+
 
 }

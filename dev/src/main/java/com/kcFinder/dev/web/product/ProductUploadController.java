@@ -16,6 +16,7 @@ import com.kcFinder.dev.web.dto.CMRespDto;
 import com.kcFinder.dev.web.dto.product.MatchingMyProductListRespDto;
 import com.kcFinder.dev.web.dto.product.MatchingMyProductPlusListRespDto;
 import com.kcFinder.dev.web.dto.product.ProductFileReqDto;
+import com.kcFinder.dev.web.dto.product.ProductListRespDto;
 import com.kcFinder.dev.web.dto.product.ProductReqDto;
 
 import lombok.RequiredArgsConstructor;
@@ -110,4 +111,26 @@ public class ProductUploadController {
 //		return ResponseEntity.ok().body(new CMRespDto<>(1, "나의 기자재 불러오기 성공", result));
 //
 //	}
+	
+    @GetMapping("/list/all/{page}")
+    public ResponseEntity<?> getAllProducts(@PathVariable("page") int page) {
+        try {
+            ProductListRespDto result = productService.getAllProducts(page);
+            return ResponseEntity.ok().body(new CMRespDto<>(1, "불러오기 성공", result));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok().body(new CMRespDto<>(0, "불러오기 실패", null));
+        }
+    }
+    
+    @GetMapping("/list/{userCode}/{page}")
+    public ResponseEntity<?> getProductsByUser(@PathVariable("userCode") int userCode, @PathVariable("page") int page) {
+        try {
+            ProductListRespDto result = productService.getProductsByUser(userCode, page);
+            return ResponseEntity.ok().body(new CMRespDto<>(1, "불러오기 성공", result));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok().body(new CMRespDto<>(0, "불러오기 실패", null));
+        }
+    }
 }
