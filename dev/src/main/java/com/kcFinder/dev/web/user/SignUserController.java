@@ -47,12 +47,22 @@ public class SignUserController {
 			UserCode = signUserService.signinUser(signinReqDto);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.ok().body(new CMRespDto<>(-1, "로그인 실패", UserCode));
+			return ResponseEntity.ok().body(new CMRespDto<>(-1, e.getMessage(), null));
 
 		}
 		return ResponseEntity.ok().body(new CMRespDto<>(1, "로그인 성공", UserCode));
-
 		
 	}
+	
+	// 아이디 중복확인
+    @GetMapping("/dup-check/{userId}")
+    public ResponseEntity<?> checkDuplicateUserId(@PathVariable("userId") String userId) {
+        try {
+            boolean isAvailable = signUserService.checkUserIdAvailability(userId);
+            return ResponseEntity.ok().body(new CMRespDto<>(1, "사용 가능한 아이디입니다.", isAvailable));
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(new CMRespDto<>(-1, e.getMessage(), false));
+        }
+    }
 	
 }

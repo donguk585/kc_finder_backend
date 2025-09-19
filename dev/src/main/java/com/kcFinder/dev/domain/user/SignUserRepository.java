@@ -9,4 +9,6 @@ public interface SignUserRepository {
 	public int saveSignupUser(User user) throws Exception;
 	
 	public User findUserByUserId(@Param("user_id") String user_id) throws Exception;
+	
+	public int countByUserId(@Param("userId") String userId) throws Exception;
 }

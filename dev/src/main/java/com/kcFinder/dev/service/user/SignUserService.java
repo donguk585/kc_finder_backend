@@ -8,4 +8,6 @@ public interface SignUserService {
 	public int saveSignupUser(SignupUserReqDto signupUserReqDto) throws Exception;
 	
 	public int signinUser(SigninReqDto signinReqDto) throws Exception;
+	
+	boolean checkUserIdAvailability(String userId) throws Exception;
 }
